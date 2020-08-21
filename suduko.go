@@ -31,135 +31,129 @@ func main() {
 
 }
 
-func generateGrid(seedValue int){
-		//
-		var wg sync.WaitGroup
+func generateGrid(seedValue int) {
+	//
+	var wg sync.WaitGroup
 
-		//
-		// Initialization Logic
-		//
-		for i := 0; i < 9; i++ {
-			oneToNineArray[i] = i + 1
-			// initializing the matrix to blank := 0
-			for j := 0; j < 9; j++ {
-				grid[i][j] = 0
-			}
+	//
+	// Initialization Logic
+	//
+	for i := 0; i < 9; i++ {
+		oneToNineArray[i] = i + 1
+		// initializing the matrix to blank := 0
+		for j := 0; j < 9; j++ {
+			grid[i][j] = 0
 		}
-	
-		/*
-		   Consider our Grid consists of 9 blocks, such as
-	
-		   block0	block1		block2
-		   block3	block4		block5
-		   block6	block7		block8
-	
-		   Each block consists of a 3 X 3 Array of elements from 1 to 9, with no duplicates allowed
-	
-		*/
-		// Our index range is between 0 and len(c)
-		// Below logic is for block number 0 , 4, 8
-	
-		// for loop is run 3 times as we will be initializing 3 blocks at first
-	
-		//
-		// Logic which fills block 0, 4, 8 of the suduko
-		//
-		for offset := 0; offset <= 6; offset += 3 {
-			wg.Add(1)
-			go parallelBlock048(offset, seedValue, &wg)
-		}
-	
-		// wait for the threads
-		wg.Wait()
-	
-		//
-		// Logic which fills block 2, 3, 7 of the suduko
-		//
-		blockID := 2
-		wg.Add(1)
-		go parallelBlock237(blockID, &wg)
-		
-		blockID = 3
-		wg.Add(1)
-		go parallelBlock237(blockID, &wg)
-	
-		blockID = 7
-		wg.Add(1)
-		go parallelBlock237(blockID, &wg)
-		
-	
-		wg.Wait()
-	
-	// Logic for block 1, 5, 6
-		
-		blockID = 1
-		wg.Add(1)
-		go parallelBlock237(blockID, &wg)
-		
-		
-		blockID = 5
-		wg.Add(1)
-		go parallelBlock237(blockID, &wg)
-		
-		
-		blockID = 6
-		wg.Add(1)
-		go parallelBlock237(blockID, &wg)
-		
-	
-		wg.Wait()
-	
-
-	
-		// Validation logic
-		//sudukoValidation := CompleteValidation()
-	
-		//fmt.Println(sudukoValidation)
 	}
-func displayGrid(){
-		
-		/*
-		// for SeedValue = 560
-        1       8       3       6       7       9       4       2       5
-        9       5       2       8       1       4       3       7       6
-        4       7       6       3       5       2       8       9       1
-        2       1       7       4       3       5       9       6       8
-        6       9       8       1       2       7       5       3       4
-        3       4       5       9       8       6       7       1       2
-        8       6       9       2       4       3       1       5       7
-        7       3       4       5       6       1       2       8       9
-        5       2       1       7       9       8       6       4       3
-		*/
-		// Printing the grid
-	
+
+	/*
+	   Consider our Grid consists of 9 blocks, such as
+
+	   block0	block1		block2
+	   block3	block4		block5
+	   block6	block7		block8
+
+	   Each block consists of a 3 X 3 Array of elements from 1 to 9, with no duplicates allowed
+
+	*/
+	// Our index range is between 0 and len(c)
+	// Below logic is for block number 0 , 4, 8
+
+	// for loop is run 3 times as we will be initializing 3 blocks at first
+
+	//
+	// Logic which fills block 0, 4, 8 of the suduko
+	//
+	for offset := 0; offset <= 6; offset += 3 {
+		wg.Add(1)
+		go parallelBlock048(offset, seedValue, &wg)
+	}
+
+	// wait for the threads
+	wg.Wait()
+
+	//
+	// Logic which fills block 2, 3, 7 of the suduko
+	//
+	blockID := 2
+	wg.Add(1)
+	go parallelBlock237(blockID, &wg)
+
+	blockID = 3
+	wg.Add(1)
+	go parallelBlock237(blockID, &wg)
+
+	blockID = 7
+	wg.Add(1)
+	go parallelBlock237(blockID, &wg)
+
+	wg.Wait()
+
+	// Logic for block 1, 5, 6
+
+	blockID = 1
+	wg.Add(1)
+	go parallelBlock237(blockID, &wg)
+
+	blockID = 5
+	wg.Add(1)
+	go parallelBlock237(blockID, &wg)
+
+	blockID = 6
+	wg.Add(1)
+	go parallelBlock237(blockID, &wg)
+
+	wg.Wait()
+
+	// Validation logic
+	//sudukoValidation := CompleteValidation()
+
+	//fmt.Println(sudukoValidation)
+}
+func displayGrid() {
+
+	/*
+			// for SeedValue = 560
+	        1       8       3       6       7       9       4       2       5
+	        9       5       2       8       1       4       3       7       6
+	        4       7       6       3       5       2       8       9       1
+	        2       1       7       4       3       5       9       6       8
+	        6       9       8       1       2       7       5       3       4
+	        3       4       5       9       8       6       7       1       2
+	        8       6       9       2       4       3       1       5       7
+	        7       3       4       5       6       1       2       8       9
+	        5       2       1       7       9       8       6       4       3
+	*/
+	// Printing the grid
+
+	fmt.Println()
+	for i := 0; i < 9; i++ {
+		for j := 0; j < 9; j++ {
+			fmt.Print("\t", grid[i][j])
+		}
 		fmt.Println()
-		for i := 0; i < 9; i++ {
-			for j := 0; j < 9; j++ {
-				fmt.Print("\t", grid[i][j])
-			}
-			fmt.Println()
+	}
+}
+func parallelBlock048(offset, seedValue int, wg *sync.WaitGroup) {
+
+	b := oneToNineArray // b is copy of array
+	c := b[:]           // c is a slice referring array b
+	rand.Seed(int64(offset + seedValue))
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++ {
+			// getting a random index i
+			randomIndex := rand.Intn(len(c))
+			// Putting the element at i into grid
+			// Putting the element onto grid
+			grid[i+offset][j+offset] = c[randomIndex]
+			// Put last element at index i
+			c[randomIndex] = c[len(c)-1]
+			// Decrement size of slice by 1
+			c = c[:len(c)-1]
 		}
-}	
-	func parallelBlock048(offset , seedValue int, wg *sync.WaitGroup) {
-	
-		b := oneToNineArray // b is copy of array
-		c := b[:]           // c is a slice referring array b
-		rand.Seed(int64(offset + seedValue))
-		for i := 0; i < 3; i++ {
-			for j := 0; j < 3; j++ {
-				// getting a random index i
-				randomIndex := rand.Intn(len(c))
-				// Putting the element at i into grid
-				// Putting the element onto grid
-				grid[i+offset][j+offset] = c[randomIndex]
-				// Put last element at index i
-				c[randomIndex] = c[len(c)-1]
-				// Decrement size of slice by 1
-				c = c[:len(c)-1]
-			}
-		}
-		wg.Done()
-		return
+	}
+	wg.Done()
+	return
 }
 
 // needs editing
@@ -206,7 +200,7 @@ func parallelBlock237(blockID int, wg *sync.WaitGroup) {
 
 	// putting values into Suduko
 
-	//value := 
+	//value :=
 	insert(blockID, mapp)
 	/*if value == false {
 		//fmt.Println("Suduko not possible, Try with other seed")
@@ -275,7 +269,7 @@ func insert(blockID int, mapp map[int][]int) bool {
 	return true
 }
 
-func solveArray(sequence *[9]int, arrayOfSlices [9][]int, k , blockID int) bool {
+func solveArray(sequence *[9]int, arrayOfSlices [9][]int, k, blockID int) bool {
 	if k >= 9 {
 		return true
 	}
@@ -285,7 +279,7 @@ func solveArray(sequence *[9]int, arrayOfSlices [9][]int, k , blockID int) bool 
 			sequence[k] = arrayOfSlices[k][i]
 			//fmt.Println(sequence[k])
 
-			if solveArray(sequence, arrayOfSlices, k+1, blockID ) {
+			if solveArray(sequence, arrayOfSlices, k+1, blockID) {
 				return true
 			}
 			//sequence[k] = arrayOfSlices[k][i+1]
@@ -294,7 +288,7 @@ func solveArray(sequence *[9]int, arrayOfSlices [9][]int, k , blockID int) bool 
 	return false
 }
 
-func isSafe(sequence *[9]int, arrayOfSlices [9][]int, k, index , blockID int) bool {
+func isSafe(sequence *[9]int, arrayOfSlices [9][]int, k, index, blockID int) bool {
 	if k == 0 {
 		return true
 	}
@@ -307,7 +301,7 @@ func isSafe(sequence *[9]int, arrayOfSlices [9][]int, k, index , blockID int) bo
 		mapp[copySequence[i]] = true
 	}
 
-	if len(mapp) == k+1 {// && dependentBlock( blockID, sequence ){
+	if len(mapp) == k+1 { // && dependentBlock( blockID, sequence ){
 		return true
 	}
 	return false
