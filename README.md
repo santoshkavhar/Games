@@ -1,9 +1,15 @@
-# Games
-suduko.go
-This go program is the creation of suduko game with the motto to learn GO in a playful way.
+# Sudoku-Game
 
 ### To run
 ```
-go run sudoku.go
+go build
+go run ./(name of the program)
 ```
-Thanks Mayur Deshmukh for such a charismatic Backend.
+
+gridGeneration.go 
+Contains Logic for Grid Generation
+
+validation.go
+Contains only validation logic
+
+Thanks Mayur Deshmukh for Frontend
