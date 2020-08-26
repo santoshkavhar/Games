@@ -2,9 +2,16 @@
 
 ### To run
 ```
-go build
 go run ./(name of the program)
 ```
+
+### To build
+```
+go build
+./(name of the folder)
+```
+
+
 ### To Test
 ```
 go test -v
