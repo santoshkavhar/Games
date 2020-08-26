@@ -61,6 +61,19 @@ func newGameHandler(rw http.ResponseWriter, req *http.Request){
 	}
 	s := Sudoku{}
 	s.initializeSudoku()
+	
+	//Testing
+	/*
+	_, level, err := c.ReadMessage()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	
+	s.level, _ = strconv.Atoi(string(level))
+	
+	*/
+	
 	err = s.generateGrid()
 	if err != nil {
 		fmt.Println(err)
@@ -103,3 +116,4 @@ func newGameHandler(rw http.ResponseWriter, req *http.Request){
 		}	
 	}	
 }
+

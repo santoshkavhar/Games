@@ -35,7 +35,7 @@ func(s *Sudoku) generateGrid() error {
 	randomValue :=r.Intn( len(seeds) - 1 )	
 
 	seedValue := seeds[randomValue]
-
+	//seedValue = 9518
 	/*
 	   Consider our Grid consists of 9 blocks, such as
 
@@ -55,23 +55,21 @@ func(s *Sudoku) generateGrid() error {
 	// Logic which fills block 0, 4, 8 of the suduko
 	
 	// offset will help us identify block number 0, 4, 8
-	// since we are generating blocks independently, we can use go routines
+	// Lesson Learnt : Adoid go routines where order of execution matters
+	// This does matter in  Block048, so its changed from parallelBlock048 to just plain Block048
 	for offset := 0; offset <= 6; offset += 3 {
-		// Add 1 process to waitGroup named wg
-		wg.Add(1)
-		// Pass WaitGroup's address as that will be modified by thread
-		// i.e It will get decremented after thread execution completes
-		go s.parallelBlock048(offset, seedValue, &wg)
+		s.Block048(offset, seedValue)
 	}
-
-	// wait for 3 threads to finish execution
-	wg.Wait()
-
 	
-	// Logic for generating block 2, 3, 7 of the suduko
+	// Logic for generating block 2, 3, 7 of the suduko	
+	// since we are generating blocks independently, we can use go routines
 	
 	blockID := 2
+	// Add 1 process to waitGroup named wg
 	wg.Add(1)
+	
+	// Pass WaitGroup's address as that will be modified by thread
+	// i.e It will get decremented after thread execution completes
 	go s.parallelBlock237(blockID, &wg)
 
 	blockID = 3
@@ -82,8 +80,9 @@ func(s *Sudoku) generateGrid() error {
 	wg.Add(1)
 	go s.parallelBlock237(blockID, &wg)
 
+	// wait for 3 threads to finish execution
 	wg.Wait()
-
+	
 
 	// Logic for generating block 1, 5, 6
 
@@ -192,7 +191,7 @@ func displayGrid(grid *[9][9]int) {
 }
 
 
-func  (s *Sudoku) parallelBlock048(offset, seedValue int, wg *sync.WaitGroup) {
+func  (s *Sudoku) Block048(offset, seedValue int) {
 	
 	// b is copy of array
 	b := s.oneToNineArray 
@@ -218,7 +217,6 @@ func  (s *Sudoku) parallelBlock048(offset, seedValue int, wg *sync.WaitGroup) {
 			c = c[:len(c)-1]
 		}
 	}
-	wg.Done()
 	return
 }
 

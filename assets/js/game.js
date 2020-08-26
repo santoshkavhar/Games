@@ -1,9 +1,14 @@
 var conn
 function loadGame() {
     conn = new WebSocket("ws://" + document.location.host + "/ws");
+    
+    //Testing
+    //conn.send(document.getElementByName("level"))
+    
     conn.close = function () {
     console.log("Connection with Server closed")
     }
+    
     conn.onmessage = function (server_data) {
         var message = server_data.data
         console.log("Message len :", message.length)
